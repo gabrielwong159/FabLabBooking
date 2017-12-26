@@ -1,7 +1,7 @@
 from mydateutil import parse
 
 class Slot(object):
-    url_head = "fablab/fablabbooking/Web/"
+    url_head = "http://fablab/fablabbooking/Web/"
     url_body = "reservation.php?rid=1&sid=1"
 
     def __init__(self, raw_start, raw_end):
@@ -22,6 +22,9 @@ class Slot(object):
     def __str__(self):
         return str({"date": self._date, "start": self._start, "end": self._end})
 
+    def get_dict(self):
+        return {"date": self._date, "start": self._start, "end": self._end}
+
     def get_link(self):
         return Slot.url_head + Slot.url_body + "&rd={rd}&sd={sd}&ed={ed}".format(rd=self._rd, sd=self._sd, ed=self._ed)
 
@@ -30,4 +33,5 @@ if __name__ == "__main__":
     raw_end = "2017-12-19%2010%3A30%3A00"
     slot = Slot(raw_start, raw_end)
     print(slot)
+    print(slot.get_dict())
     print(slot.get_link())
