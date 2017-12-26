@@ -9,8 +9,8 @@ with open("firebase_config.json", "r") as f:
 
 def load_fake_info():
     l = []
-    l.append({"date": "2017-12-19", "start": "1630", "end": "1700"})
-    l.append({"date": "2017-12-19", "start": "1530", "end": "1600"})
+    l.append({"date": "19-12-2017", "start": "1630", "end": "1700"})
+    l.append({"date": "19-12-2017", "start": "1530", "end": "1600"})
     firebase.put("/", "subscriptions", l)
 
 def get_user_credentials():
