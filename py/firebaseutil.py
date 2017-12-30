@@ -25,16 +25,19 @@ def process_bookings(response):
     check_bookings()
 
 def update_slots(slots):
-    data = list(map(lambda s: s.get_dict(), slots))
+    data = list(map(Slot.get_dict, slots))
     firebase.put_async(root, "slots", data, None)
     firebase.get_async(root, "subscriptions", partial(compare_subscriptions, slots))
 
 def compare_subscriptions(slots, response):
+    slot_set = set(slots)   
     # convert dictionaries from firebase into list of slots
-    subscriptions = list(map(Slot.dict_to_slot, response))
-    common_slots = set(slots) & set(subscriptions)
-    for slot in common_slots:
+    subscriptions_book = map(Slot.dict_to_slot, filter(lambda d: d["autoBook"], response))
+    for slot in (slot_set & set(subscriptions_book)):
         book(slot)
+        
+    subscriptions_notify = map(Slot.dict_to_slot, filter(lambda d:  not d["autoBook"], response))
+    notify(slot_set & set(subscriptions_notify))
 
 def book(slot):
     print("Booking", slot)
@@ -52,12 +55,18 @@ def book(slot):
     driver.find_element_by_class_name("create").click()
     #driver.quit()
 
+def notify(slots):
+    data = list(map(Slot.get_dict, slots))
+    print("Notify", data)
+    firebase.put_async(root, "notifications", data)    
+
 def load_fake_info():
     l = []
-    l.append({"date": "19-12-2017", "start": "1630", "end": "1700"})
-    l.append({"date": "19-12-2017", "start": "1530", "end": "1600"})
+    l.append({"date": "19-12-2017", "start": "1630", "end": "1700", "autoBook": True})
+    l.append({"date": "19-12-2017", "start": "1530", "end": "1600", "autoBook": False})
     firebase.put(root, "subscriptions", l)
                        
 if __name__ == "__main__":
     load_fake_info()
-    firebase.get_async(root, "subscriptions", partial(compare_subscriptions, []))
+    slots = map(Slot.dict_to_slot, firebase.get(root, "slots"))
+    firebase.get_async(root, "subscriptions", partial(compare_subscriptions, slots))

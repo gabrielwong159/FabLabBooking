@@ -1,4 +1,5 @@
-function Slot(date, start, end) {
+function Slot(key, date, start, end) {
+	this.key = key;
 	this.date = date;
 	this.start = start;
 	this.end = end;

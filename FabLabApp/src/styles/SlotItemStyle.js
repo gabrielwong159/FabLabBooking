@@ -34,4 +34,11 @@ export default styles = StyleSheet.create({
 	end: {
 		flex: 0.25,
 	},
+
+	icon: {
+		flex: 0.2,
+		marginTop: 8,
+		marginBottom: 8,
+		fontSize: 36,
+	}
 });
