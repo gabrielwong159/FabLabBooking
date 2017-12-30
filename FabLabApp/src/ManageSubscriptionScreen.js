@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import styles from './styles/ManageSubscriptionStyle';
-import Subscription from './util/Subscription';
+import Slot from './util/Slot';
 import SlotItem from './components/SlotItem';
 
 export default class ManageSubscriptionScreen extends Component {
@@ -22,7 +22,7 @@ export default class ManageSubscriptionScreen extends Component {
 		this.subscriptionRef.on("value", (snap) => {
 			let items = [];
 			snap.forEach((child) => {
-				items.push(new Subscription(child.key, child.val().date, child.val().start, child.val().end, child.val().autoBook));
+				items.push(new Slot(child.key, child.val().date, child.val().start, child.val().end, child.val().autoBook));
 			});
 
 			this.setState({ data: items });
