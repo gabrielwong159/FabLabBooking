@@ -15,11 +15,11 @@ export default styles = StyleSheet.create({
 	},
 
 	data: {
-		fontSize: 24,
+		fontSize: 20,
 		marginLeft: 10,
 		marginRight: 10,
-		paddingTop: 10,
-		paddingBottom: 10,
+		paddingTop: 8,
+		paddingBottom: 8,
 		textAlign: "left",
 	},
 
@@ -37,8 +37,6 @@ export default styles = StyleSheet.create({
 
 	icon: {
 		flex: 0.2,
-		marginTop: 8,
-		marginBottom: 8,
 		fontSize: 36,
 	}
 });
