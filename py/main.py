@@ -17,9 +17,8 @@ def get_reservables(username, password):
 
 def reservable_to_slot(reservable):
     attrs = reservable.attrs
-    time_start, time_end = attrs["data-start"], attrs["data-end"]
-    #print(time_start, time_end, attrs["data-href"])
-    return Slot(time_start, time_end)
+    href, time_start, time_end = attrs["data-href"], attrs["data-start"], attrs["data-end"]
+    return Slot(href, time_start, time_end)
 
 def refresh_slots(username, password):
     reservables = get_reservables(username, password)
@@ -28,3 +27,4 @@ def refresh_slots(username, password):
 
 if __name__ == "__main__":
     username, password = firebase.get_user_credentials()
+    refresh_slots(username, password)
