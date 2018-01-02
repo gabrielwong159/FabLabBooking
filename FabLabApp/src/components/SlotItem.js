@@ -60,8 +60,9 @@ export default class SlotItem extends Component {
 	_subscriptionListener() {
 		var { item } = this.state;
 		item.autoBook = !item.autoBook;
-		var { key, date, start, end, autoBook } = item;
+		var { key, href, date, start, end, autoBook } = item;
 		this.subscriptionRef.child(key).set({
+			href: href,
 			date: date,
 			start: start,
 			end: end,

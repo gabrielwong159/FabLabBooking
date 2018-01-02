@@ -22,7 +22,7 @@ export default class ManageSubscriptionScreen extends Component {
 		this.subscriptionRef.on("value", (snap) => {
 			let items = [];
 			snap.forEach((child) => {
-				items.push(new Slot(child.key, child.val().date, child.val().start, child.val().end, child.val().autoBook));
+				items.push(new Slot(child.key, child.val().href, child.val().date, child.val().start, child.val().end, child.val().autoBook));
 			});
 
 			this.setState({ data: items });

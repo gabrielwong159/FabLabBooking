@@ -22,7 +22,7 @@ export default class MainScreen extends Component {
 		this.slotRef.on("value", (snap) => {
 			let items = [];
 			snap.forEach((child) => {
-				items.push(new Slot(child.key, child.val().date, child.val().start, child.val().end));
+				items.push(new Slot(child.key, child.val().href, child.val().date, child.val().start, child.val().end));
 			});
 
 			this.setState({ data: items });
