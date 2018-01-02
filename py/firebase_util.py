@@ -65,8 +65,8 @@ def notify(slots):
 
 def load_fake_info():
     l = []
-    l.append({"date": "19-12-2017", "start": "1630", "end": "1700", "autoBook": True})
-    l.append({"date": "19-12-2017", "start": "1530", "end": "1600", "autoBook": False})
+    l.append({"href": "reservation.php?rid=1&sid=1&rd=2017-12-19", "date": "19-12-2017", "start": "1630", "end": "1700", "autoBook": True})
+    l.append({"href": "reservation.php?rid=1&sid=1&rd=2017-12-19", "date": "19-12-2017", "start": "1530", "end": "1600", "autoBook": False})
     firebase.put(root, "subscriptions", l)
                        
 if __name__ == "__main__":
