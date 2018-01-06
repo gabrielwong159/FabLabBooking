@@ -3,6 +3,7 @@ from selenium import webdriver
 from firebase import firebase
 from functools import partial
 from slot import Slot
+from telegram_util import notify
 
 with open("firebase_config.json", "r") as f:
     firebase_config = json.loads(f.read())
@@ -57,8 +58,10 @@ def book(slot):
 
 def notify(slots):
     data = list(map(Slot.get_dict, slots))
-    print("Notify", data)
-    firebase.put_async(root, "notifications", data)    
+    print("Notify\n", data)
+    #firebase.put_async(root, "notifications", data)
+    messages = map(str, slots)
+    notify(messages)
 
 def load_fake_info():
     l = []

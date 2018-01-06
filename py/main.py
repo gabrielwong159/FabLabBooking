@@ -1,7 +1,7 @@
 import requests
 import json
 from bs4 import BeautifulSoup
-import firebaseutil as firebase
+import firebase_util as firebase
 from slot import Slot
 
 url = "http://fablab/fablabbooking/Web/index.php"

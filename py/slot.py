@@ -1,4 +1,4 @@
-from mydateutil import string_to_date, parse
+from my_date_util import string_to_date, parse
 
 class Slot(object):
     url_head = "http://fablab/fablabbooking/Web/"
