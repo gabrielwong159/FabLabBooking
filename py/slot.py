@@ -49,6 +49,9 @@ class Slot(object):
 
     def __hash__(self):
         return hash((self._rd, self._sd, self._ed))
+
+    def pretty_print(self):
+        return "Slot on {}, {} - {}".format(self._date, self._start, self._end)
     
 if __name__ == "__main__":
     href = "reservation.php?rid=1&sid=1&rd=2017-12-19"

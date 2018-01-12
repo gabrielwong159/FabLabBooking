@@ -9,5 +9,5 @@ with open("telegram_config.json", "r") as f:
 updater = Updater(token=telegram_token)
 bot = updater.dispatcher.bot
 
-def notify(messages: []):
+def notify_telegram(messages:list):
     for message in messages: bot.send_message(chat_id, message)
