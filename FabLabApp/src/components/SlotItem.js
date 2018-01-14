@@ -54,20 +54,25 @@ export default class SlotItem extends Component {
 	}
 
 	_bookSlot() {
-		this.bookingRef.push(this.state.item);
-	}
-
-	_subscriptionListener() {
-		var { item } = this.state;
-		item.autoBook = !item.autoBook;
-		var { key, href, date, start, end, autoBook } = item;
-		this.subscriptionRef.child(key).set({
+		var { href, date, start, end } = this.state.item;
+		this.bookingRef.push({
 			href: href,
 			date: date,
 			start: start,
 			end: end,
-			autoBook: autoBook,
 		});
+	}
+
+	_subscriptionListener() {
+		var { key, date, start, end, autoBook } = this.state.item;
+		var newItem = {
+			date: date,
+			start: start,
+			end: end,
+			autoBook: !autoBook,
+		};
+		this.subscriptionRef.child(key).set(newItem);
+		this.setState({ item: newItem });
 	}
 
 	_subscriptionLongListener() {
