@@ -11,7 +11,7 @@ class Slot(object):
 
         raw_start = "%20".join((date, start))
         raw_end = "%20".join((date, end))
-        return Slot(d["href"], raw_start, raw_end)
+        return Slot(d.get("href", ""), raw_start, raw_end)
 
     def __init__(self, href, raw_start, raw_end):
         start_date, start_time = parse(raw_start)

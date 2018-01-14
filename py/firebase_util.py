@@ -31,17 +31,26 @@ def update_slots(slots):
     firebase.put_async(root, "slots", data, None)
     firebase.get_async(root, "subscriptions", partial(compare_subscriptions, slots))
 
+def find_common_slots(slots, other):
+    res = []
+    for slot in slots:
+        for item in other:
+            if slot == item:
+                res.append(slot)
+                break
+    return res
+
 def compare_subscriptions(slots, response):
     slot_set = set(slots)
     # convert dictionaries from firebase into list of slots
     subscriptions_book = map(Slot.dict_to_slot, filter(lambda d: d["autoBook"], response))
     subscriptions_book = set(subscriptions_book)
-    for slot in (slot_set & subscriptions_book):
+    for slot in (find_common_slots(slot_set, subscriptions_book)):
         book(slot)
 
     subscriptions_notify = map(Slot.dict_to_slot, filter(lambda d: not d["autoBook"], response))
     subscriptions_notify = set(subscriptions_notify)
-    notify(slot_set & subscriptions_notify)
+    notify(find_common_slots(slot_set, subscriptions_notify))
 
 def book(slot):
     print("Booking", slot)
@@ -75,6 +84,6 @@ def load_fake_info():
                        
 if __name__ == "__main__":
     #load_fake_info()
-    #slots = map(Slot.dict_to_slot, firebase.get(root, "slots"))
-    #firebase.get_async(root, "subscriptions", partial(compare_subscriptions, slots))
-    print(firebase.get(root, "subscriptions"))
+    slots = map(Slot.dict_to_slot, firebase.get(root, "slots"))
+    firebase.get_async(root, "subscriptions", partial(compare_subscriptions, slots))
+    #print(firebase.get(root, "subscriptions"))
