@@ -9,6 +9,14 @@ export default styles = StyleSheet.create({
 		margin: "10%",
 	},
 
+	timePickerContainer: {
+		flexDirection: "row",
+	},
+
+	timePicker: {
+		width: "50%",
+	},
+
 	buttonContainer: {
 		flex: 0.5,
 		marginLeft: 0,

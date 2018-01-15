@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {
+	Picker,
 	Text,
+	ToastAndroid,
 	View,
 } from 'react-native';
 import { Button } from 'react-native-elements';
@@ -10,8 +12,16 @@ import styles from './styles/AddSubscriptionStyle';
 export default class AddSubscriptionScreen extends Component {
 	constructor(props) {
 		super(props);
+		this.subscriptionRef = global.firebase.database().ref("subscriptions");
+
+		let hourItems = ["09", "10", "11", "12", "13", "14", "15", "16"];
+		let minuteItems = ["00", "30"];
 		this.state = {
-			date: this._dateToString(new Date())
+			hourItems: hourItems,
+			minuteItems: minuteItems,
+			date: this._dateToString(new Date()),
+			selectedHour: hourItems[0],
+			selectedMinute: minuteItems[0],
 		};
 	}
 
@@ -31,6 +41,22 @@ export default class AddSubscriptionScreen extends Component {
 						date={this.state.date}
 						onDateChange={date => {this.setState({date: date})}}
 					/>
+					<View style={styles.timePickerContainer}>
+						<Picker
+							style={styles.timePicker}
+							selectedValue={this.state.selectedHour}
+							onValueChange={(value, index) => this.setState({selectedHour: value})}
+						>
+							{this._renderHourItems()}
+						</Picker>
+						<Picker
+							style={styles.timePicker}
+							selectedValue={this.state.selectedMinute}
+							onValueChange={(value, index) => this.setState({selectedMinute: value})}
+						>
+							{this._renderMinuteItems()}
+						</Picker>
+					</View>
 				</View>
 				<View style={styles.buttonBar}>
 					<Button
@@ -49,7 +75,7 @@ export default class AddSubscriptionScreen extends Component {
 						large
 						raised
 						icon={{name: "add-circle-outline"}}
-						onPress={() => this._navigate("manageSubscription")}
+						onPress={() => this._addSubscription()}
 					/>
 				</View>
 			</View>
@@ -88,11 +114,43 @@ export default class AddSubscriptionScreen extends Component {
 		return this._dateToString(d);
 	}
 
+	_renderPickerItems(items) {
+		return items.map((s, i) => {
+			return <Picker.Item key={i} label={s} value={s} />
+		});
+	}
+
+	_renderHourItems() {
+		return this._renderPickerItems(this.state.hourItems);
+	}
+
+	_renderMinuteItems() {
+		return this._renderPickerItems(this.state.minuteItems);
+	}
+
 	_navigate(title) {
 		const { params } = this.props.navigation.state;
 		this.props.navigation.navigate(title, {
 			username: params.username,
 			password: params.password,
 		});
+	}
+
+	_addSubscription() {
+		var startHour = this.state.selectedHour;
+		var startMinute = this.state.selectedMinute;
+		var endHour = (startMinute == "00") ? startHour : String(parseInt(startHour) + 1);
+		var endMinute = (startMinute == "00") ? "30" : "00";
+
+		this.subscriptionRef.push({
+			date: this.state.date,
+			start: startHour + startMinute,
+			end: endHour + endMinute,
+			autoBook: false,
+		});
+
+		this._navigate("manageSubscription");
+		var message = "Subscription added, long press to delete";
+		ToastAndroid.show(message, ToastAndroid.SHORT);
 	}
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
 	Alert,
 	Text,
+	ToastAndroid,
 	TouchableHighlight,
 	View,
 } from 'react-native';
@@ -73,6 +74,9 @@ export default class SlotItem extends Component {
 			end: end,
 			autoBook: autoBook,
 		});
+
+		var message = "Set subscription to " + (autoBook ? "auto book" : "notify only");
+		ToastAndroid.show(message, ToastAndroid.SHORT);
 	}
 
 	_subscriptionLongListener() {
