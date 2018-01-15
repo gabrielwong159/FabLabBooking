@@ -35,28 +35,32 @@ export default class AddSubscriptionScreen extends Component {
 						mode="date"
 						format="DD-MM-YYYY"
 						minDate={this._getMinDate()}
-						maxDate={this._getMaxDate()}
 						confirmBtnText="Confirm"
 						cancelBtnText="Cancel"
 						date={this.state.date}
 						onDateChange={date => {this.setState({date: date})}}
 					/>
+					<Text style={styles.label}>Start</Text>
 					<View style={styles.timePickerContainer}>
-						<Picker
-							style={styles.timePicker}
-							selectedValue={this.state.selectedHour}
-							onValueChange={(value, index) => this.setState({selectedHour: value})}
-						>
-							{this._renderHourItems()}
-						</Picker>
-						<Picker
-							style={styles.timePicker}
-							selectedValue={this.state.selectedMinute}
-							onValueChange={(value, index) => this.setState({selectedMinute: value})}
-						>
-							{this._renderMinuteItems()}
-						</Picker>
+						<View style={styles.timePicker}>
+							<Picker
+								selectedValue={this.state.selectedHour}
+								onValueChange={(value, index) => this.setState({selectedHour: value})}
+							>
+								{this._renderHourItems()}
+							</Picker>
+						</View>
+						<View style={styles.timePicker}>
+							<Picker
+								selectedValue={this.state.selectedMinute}
+								onValueChange={(value, index) => this.setState({selectedMinute: value})}
+							>
+								{this._renderMinuteItems()}
+							</Picker>
+						</View>
 					</View>
+					<Text style={styles.label}>End</Text>
+					<Text style={styles.endText}>{this._getEndHour() + this._getEndMinute()}</Text>
 				</View>
 				<View style={styles.buttonBar}>
 					<Button
@@ -128,6 +132,21 @@ export default class AddSubscriptionScreen extends Component {
 		return this._renderPickerItems(this.state.minuteItems);
 	}
 
+	_getEndHour() {
+		var startHour = this.state.selectedHour;
+		var startMinute = this.state.selectedMinute;
+
+		var endHour = (startMinute == "00") ? startHour : String(parseInt(startHour) + 1);
+		return endHour;
+	}
+
+	_getEndMinute() {
+		var startMinute = this.state.selectedMinute;
+
+		var endMinute = (startMinute == "00") ? "30" : "00";
+		return endMinute;
+	}
+
 	_navigate(title) {
 		const { params } = this.props.navigation.state;
 		this.props.navigation.navigate(title, {
@@ -137,15 +156,10 @@ export default class AddSubscriptionScreen extends Component {
 	}
 
 	_addSubscription() {
-		var startHour = this.state.selectedHour;
-		var startMinute = this.state.selectedMinute;
-		var endHour = (startMinute == "00") ? startHour : String(parseInt(startHour) + 1);
-		var endMinute = (startMinute == "00") ? "30" : "00";
-
 		this.subscriptionRef.push({
 			date: this.state.date,
-			start: startHour + startMinute,
-			end: endHour + endMinute,
+			start: this.state.selectedHour + this.state.selectedMinute,
+			end: this._getEndHour() + this._getEndMinute(),
 			autoBook: false,
 		});
 

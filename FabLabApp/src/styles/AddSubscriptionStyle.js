@@ -4,6 +4,19 @@ import constants from './Constant';
 export default styles = StyleSheet.create({
 	header: constants.header,
 
+	label: {
+		fontSize: 20,
+		textAlign: "center",
+		marginTop: "5%",
+	},
+
+	endText: {
+		fontSize: 16,
+		textAlign: "center",
+		marginTop: "5%",
+		color: "#000000",
+	},
+
 	datePicker: {
 		width: "80%",
 		margin: "10%",
@@ -11,10 +24,17 @@ export default styles = StyleSheet.create({
 
 	timePickerContainer: {
 		flexDirection: "row",
+		justifyContent: "center",
+		marginBottom: "5%",
 	},
 
 	timePicker: {
-		width: "50%",
+		height: 45,
+		width: "20%",
+		marginLeft: "5%",
+		marginRight: "5%",
+		borderBottomWidth: 2,
+		borderBottomColor: "#9e9e9e"
 	},
 
 	buttonContainer: {
