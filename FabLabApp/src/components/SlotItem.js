@@ -64,15 +64,15 @@ export default class SlotItem extends Component {
 	}
 
 	_subscriptionListener() {
-		var { key, date, start, end, autoBook } = this.state.item;
-		var newItem = {
+		var { item } = this.state;
+		item.autoBook = !item.autoBook;
+		var { key, date, start, end, autoBook } = item;
+		this.subscriptionRef.child(key).set({
 			date: date,
 			start: start,
 			end: end,
-			autoBook: !autoBook,
-		};
-		this.subscriptionRef.child(key).set(newItem);
-		this.setState({ item: newItem });
+			autoBook: autoBook,
+		});
 	}
 
 	_subscriptionLongListener() {

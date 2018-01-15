@@ -4,6 +4,11 @@ import constants from './Constant';
 export default styles = StyleSheet.create({
 	header: constants.header,
 
+	datePicker: {
+		width: "80%",
+		margin: "10%",
+	},
+
 	buttonContainer: {
 		flex: 0.5,
 		marginLeft: 0,
