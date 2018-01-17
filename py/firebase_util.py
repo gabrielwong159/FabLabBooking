@@ -67,14 +67,14 @@ def book(slot):
     driver.find_element_by_class_name("create").click()
     driver.quit()
     
-    print("Booked")
+    notify_message("Booked: " + slot.pretty_print())
 
 def notify(slots):
     data = list(map(Slot.get_dict, slots))
     print("Notify\n", data)
     #firebase.put_async(root, "notifications", data)
     messages = map(lambda slot: slot.pretty_print(), slots)
-    notify_telegram(messages)
+    notify_messages(messages)
 
 def load_fake_info():
     l = []
