@@ -13,7 +13,6 @@ export default styles = StyleSheet.create({
 	endText: {
 		fontSize: 16,
 		textAlign: "center",
-		marginTop: "5%",
 		color: "#000000",
 	},
 
@@ -31,10 +30,11 @@ export default styles = StyleSheet.create({
 	timePicker: {
 		height: 45,
 		width: "20%",
+		margin: "5%",
 		marginLeft: "5%",
 		marginRight: "5%",
-		borderBottomWidth: 2,
-		borderBottomColor: "#9e9e9e"
+		borderBottomWidth: 1,
+		borderBottomColor: "#9e9e9e",
 	},
 
 	buttonContainer: {
