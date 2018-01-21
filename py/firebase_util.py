@@ -33,9 +33,10 @@ def update_slots(slots):
 
 def find_common_slots(slots, other):
     res = []
-    for slot in slots:
-        for item in other:
-            if slot == item:
+    # this order is necessary, as `slots` can have duplicates (same time, different machine)
+    for item in other:
+        for slot in slots:
+            if item == slot:
                 res.append(slot)
                 break
     return res
