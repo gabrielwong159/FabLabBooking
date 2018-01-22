@@ -3,7 +3,7 @@ from firebase import firebase
 from functools import partial
 from selenium import webdriver
 from slot import Slot
-from telegram_util import notify_telegram
+from telegram_util import notify_message, notify_messages
 
 with open("firebase_config.json", "r") as f:
     firebase_config = json.loads(f.read())
@@ -21,7 +21,7 @@ def check_bookings():
     firebase.get_async(root, "bookings", process_bookings)
 
 def process_bookings(response):
-    for d in response:
+    for d in response.values():
         slot = Slot.dict_to_slot(d)
         book(slot)
     firebase.put_async(root, "bookings", None)
@@ -73,7 +73,6 @@ def book(slot):
 def notify(slots):
     data = list(map(Slot.get_dict, slots))
     print("Notify\n", data)
-    #firebase.put_async(root, "notifications", data)
     messages = map(lambda slot: slot.pretty_print(), slots)
     notify_messages(messages)
 
