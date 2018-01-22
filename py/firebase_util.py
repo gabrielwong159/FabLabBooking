@@ -21,7 +21,7 @@ def check_bookings():
     firebase.get_async(root, "bookings", process_bookings)
 
 def process_bookings(response):
-    if d is None: return
+    if response is None: return
     
     for d in response.values():
         slot = Slot.dict_to_slot(d)
