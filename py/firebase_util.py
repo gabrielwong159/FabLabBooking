@@ -21,6 +21,8 @@ def check_bookings():
     firebase.get_async(root, "bookings", process_bookings)
 
 def process_bookings(response):
+    if d is None: return
+    
     for d in response.values():
         slot = Slot.dict_to_slot(d)
         book(slot)
@@ -42,6 +44,8 @@ def find_common_slots(slots, other):
     return res
 
 def compare_subscriptions(slots, response):
+    if response is None: return
+    
     slot_set = set(slots)
     # convert dictionaries from firebase into list of slots
     subscriptions_book = map(Slot.dict_to_slot, filter(lambda d: d["autoBook"], response))
