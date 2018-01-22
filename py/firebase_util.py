@@ -23,8 +23,8 @@ def check_bookings():
 def process_bookings(response):
     if response is None: return
     
-    for d in response.values():
-        slot = Slot.dict_to_slot(d)
+    for v in response.values():
+        slot = Slot.dict_to_slot(v)
         book(slot)
     firebase.put_async(root, "bookings", None)
 
@@ -48,14 +48,17 @@ def compare_subscriptions(slots, response):
     
     slot_set = set(slots)
     # convert dictionaries from firebase into list of slots
-    subscriptions_book = map(Slot.dict_to_slot, filter(lambda d: d["autoBook"], response))
+    subscriptions_book = map(Slot.dict_to_slot, filter(lambda v: v["autoBook"], response.values()))
     subscriptions_book = set(subscriptions_book)
     for slot in (find_common_slots(slot_set, subscriptions_book)):
         book(slot)
 
-    subscriptions_notify = map(Slot.dict_to_slot, filter(lambda d: not d["autoBook"], response))
+    subscriptions_notify = map(Slot.dict_to_slot, filter(lambda v: not v["autoBook"], response.values()))
     subscriptions_notify = set(subscriptions_notify)
     notify(find_common_slots(slot_set, subscriptions_notify))
+
+    new_subscriptions = {k:v for k,v in response.items() if not v["autoBook"]}
+    firebase.put_async(root, "subscriptions", new_subscriptions, None)
 
 def book(slot):
     print("Booking", slot)
