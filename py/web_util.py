@@ -5,13 +5,18 @@ from bs4 import BeautifulSoup
 import firebase_util as firebase
 from slot import Slot
 
-url = "http://fablab/fablabbooking/Web/index.php"
+login_url = "https://edbooking.sutd.edu.sg/fablabbooking/Web/"
+booking_url = "https://edbooking.sutd.edu.sg/fablabbooking/Web/schedule.php?sid=1"
 
 def get_reservables(username, password):
     headers = {"Content-Type": "application/x-www-form-urlencoded"}
     data = {"email": username, "password": password, "userType": "Student", "login": "submit", "resume": ""}
-    r = requests.post(url, headers=headers, data=data)
+
+    sess = requests.session()
+    r = sess.post(login_url, headers=headers, data=data, verify=False)
     assert "Sign Out" in r.text, "Possibly not logged in"
+    r = sess.get(booking_url)
+    assert "Laser Machine-Day" in r.text, "Not on laser cutter page"
     soup = BeautifulSoup(r.text, "html.parser")
 
     return soup.find_all("td", attrs={"class": "reservable"})

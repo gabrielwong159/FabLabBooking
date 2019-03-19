@@ -10,7 +10,7 @@ with open("firebase_config.json", "r") as f:
     auth = firebase.FirebaseAuthentication(firebase_config["secret"], firebase_config["email"], True, True)
     firebase = firebase.FirebaseApplication(firebase_config["url"], auth)
 
-url = "http://fablab/fablabbooking/Web/index.php"
+url = "https://edbooking.sutd.edu.sg/fablabbooking/Web/"
 root = "/"
 
 def get_user_credentials():
@@ -29,7 +29,8 @@ def process_bookings(response):
     firebase.put_async(root, "bookings", None)
 
 def update_slots(slots):
-    data = list(map(Slot.get_dict, slots))
+    data = [Slot.get_dict(slot) for slot in slots]
+    print('Update slots', len(data))
     firebase.put_async(root, "slots", data, None)
     firebase.get_async(root, "subscriptions", partial(compare_subscriptions, slots))
 
@@ -44,27 +45,29 @@ def find_common_slots(slots, other):
     return res
 
 def compare_subscriptions(slots, response):
+    print('Found subscriptions', len(response))
     if response is None: return
     
     slot_set = set(slots)
     # convert dictionaries from firebase into list of slots
     subscriptions_book = map(Slot.dict_to_slot, filter(lambda v: v["autoBook"], response.values()))
     subscriptions_book = set(subscriptions_book)
-    for slot in (find_common_slots(slot_set, subscriptions_book)):
+    common_slots = find_common_slots(slot_set, subscriptions_book)
+    for slot in common_slots:
         book(slot)
 
     subscriptions_notify = map(Slot.dict_to_slot, filter(lambda v: not v["autoBook"], response.values()))
     subscriptions_notify = set(subscriptions_notify)
     notify(find_common_slots(slot_set, subscriptions_notify))
 
-    new_subscriptions = {k:v for k,v in response.items() if not v["autoBook"]}
-    firebase.put_async(root, "subscriptions", new_subscriptions, None)
+    # new_subscriptions = {k:v for k,v in response.items() if not v["autoBook"]}
+    # firebase.put_async(root, "subscriptions", new_subscriptions, None)
 
 def book(slot):
     print("Booking", slot)
     
     username, password = get_user_credentials()
-    driver = webdriver.PhantomJS()
+    driver = webdriver.Chrome()
     driver.get(url)
     driver.find_element_by_name("email").send_keys(username)
     driver.find_element_by_name("password").send_keys(password)
@@ -73,7 +76,7 @@ def book(slot):
     booking_url = slot.get_link()
     driver.get(booking_url)
     driver.find_element_by_class_name("create").click()
-    driver.quit()
+    driver.close()
     
     notify_message("Booked: " + slot.pretty_print())
 
@@ -90,7 +93,7 @@ def load_fake_info():
     firebase.put(root, "subscriptions", l)
                        
 if __name__ == "__main__":
-    #load_fake_info()
+    # load_fake_info()
     slots = map(Slot.dict_to_slot, firebase.get(root, "slots"))
     firebase.get_async(root, "subscriptions", partial(compare_subscriptions, slots))
-    #print(firebase.get(root, "subscriptions"))
+    # print(firebase.get(root, "subscriptions"))

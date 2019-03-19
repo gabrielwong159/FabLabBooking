@@ -1,5 +1,5 @@
-beautifulsoup4>=4.6.0
-python-firebase>=1.2
-python-telegram-bot>=9.0.0
-requests>=2.18.4
-selenium>=3.8.1
+beautifulsoup4
+python-firebase
+python-telegram-bot
+requests
+selenium
