@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import json
 from firebase import firebase
 from functools import partial
